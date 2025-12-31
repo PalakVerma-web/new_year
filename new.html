@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --bg-color: #0d1117; /* Dark starry night */
+            --card-bg: #fffbf0; /* Creamy paper look */
+            --gold: #f4d03f;
+            --red: #c0392b;
+            --text-main: #2c3e50;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* The Mobile-First Container */
+        #app-container {
+            width: 100%;
+            max-width: 420px; /* Limits width to look like a phone on desktop */
+            height: 100vh;
+            position: relative;
+            background: var(--bg-color);
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* Starry Background Animation */
+        .stars {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('bg_4.jpg') repeat;
+            z-index: 0;
+            animation: moveStars 100s linear infinite;
+            opacity: 0.5;
+        }
+        @keyframes moveStars { from {background-position:0 0;} to {background-position:0 10000px;} }
+
+        /* Sections (Screens) */
+        .screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        .screen.hidden {
+            transform: translateY(-20px);
+        }
+
+        /* --- TYPOGRAPHY & ASSETS --- */
+        h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--gold); margin-bottom: 10px; }
+        h2 { font-family: 'Dancing Script', cursive; font-size: 2rem; color: var(--gold); margin-bottom: 20px; text-align: center;}
+        p { text-align: center; margin-bottom: 20px; font-size: 0.9rem; opacity: 0.9; }
+
+        .cat-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 15px;
+            object-fit: cover;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+
+        /* --- UI COMPONENTS --- */
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--gold), #f39c12);
+            border: none;
+            border-radius: 25px;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+            transition: transform 0.2s;
+            margin-top: 20px;
+        }
+        .btn:active { transform: scale(0.95); }
+
+        /* Card Style (for Letter/Playlist) */
+        .paper-card {
+            background: var(--card-bg);
+            color: var(--text-main);
+            width: 90%;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+        }
+
+       
+        /* Bucket List */
+        .bucket-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            text-align: left;
+            color: #333;
+        }
+        .bucket-item input { margin-right: 15px; transform: scale(1.3); }
+
+        /* Flip Card */
+        .flip-container {
+            perspective: 1000px;
+            width: 250px;
+            height: 350px;
+            cursor: pointer;
+        }
+        .flipper {
+            transition: 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .flip-container.flip .flipper { transform: rotateY(180deg); }
+        .front, .back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .front { background: #fff0f0; color: #333; }
+        .back { background: white; color: #333; transform: rotateY(180deg); }
+
+        /* Loading Bar */
+        .progress-container { width: 80%; background: rgba(255,255,255,0.2); height: 10px; border-radius: 5px; overflow: hidden; margin: 20px 0;}
+        .progress-bar { height: 100%; background: var(--gold); width: 0%; transition: width 0.3s; }
+
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    <div class="stars"></div>
+
+    <section class="screen active" id="s1">
+        <p style="letter-spacing: 3px; text-transform: uppercase;">Happy New Year</p>
+        <h1>2026</h1>
+        <img src="image_1.jpg" alt="Cat Pop" class="cat-img">
+        <p>Go ahead for my Greeting🥰</p>
+        <button class="btn" onclick="nextScreen('s1', 's2')">Start Journey</button>
+    </section>
+
+    <section class="screen" id="s2">
+        <div class="paper-card">
+            <img src="img_2.jpg" style="border-radius:50%; margin-top:-50px; border: 4px solid white; height: auto; width:200px;">
+            <h2 style="color:var(--red); margin-top: 10px;">Happy New Year!</h2>
+            <p style="color:#555">I hope you have a good year with good memories. Now let's make 2026 even better!</p>
+            <div style="font-size: 30px;">✨🎉🎊🎀🎁</div>
+        </div>
+        <button class="btn" onclick="nextScreen('s2', 's3')">See Surprises</button>
+    </section>
+
+    <section class="screen" id="s3">
+        <div class="paper-card">
+            <h2 style="color:var(--text-main)">Goals for 2026</h2>
+            
+            <div class="bucket-item">
+                <input type="checkbox"> <span>🌍 Visit a dream place</span>
+            </div>
+            <div class="bucket-item">
+                <input type="checkbox"> <span>📚 Read consistently</span>
+            </div>
+            <div class="bucket-item">
+                <input type="checkbox"> <span>🧘‍♀️ Care for mind & body</span>
+            </div>
+            <div class="bucket-item">
+                <input type="checkbox"> <span>❤️ Quality time with family</span>
+            </div>
+        </div>
+        <button class="btn" onclick="nextScreen('s3', 's4')">Let's Go!</button>
+    </section>
+
+       
+
+    <section class="screen" id="s4">
+        <h2 style="color:white">Tap to flip ✨</h2>
+        <div class="flip-container" onclick="this.classList.toggle('flip')">
+            <div class="flipper">
+                <div class="front">
+                    <img src="img_3.jpg" style="width:100px; border-radius:50%">
+                    <h3>A thought for 2026</h3>
+                    <p>Every year is a new chance to become the best version of Yourself.</p>
+                </div>
+                <div class="back">
+                    <img src="image_4.jpg" style="width:100px; border-radius:10px">
+                    <h3>You are here because..</h3>
+                    <p>You are going to start a new magic in new beginning is truly the most powerful of them all.</p>
+                    <div style="color: var(--red)">❤️</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn" onclick="nextScreen('s4', 's5')">One Last Thing</button>
+    </section>
+
+    <section class="screen" id="s5">
+        <img src="img_5.jpg" style= "width:100px; height:100px; border-radius: 10px; margin-bottom: 20px;">
+        <p>Closing 2025 on a good note...</p>
+        <div class="progress-container">
+            <div class="progress-bar" id="p-bar"></div>
+        </div>
+        <p id="loading-text">0%</p>
+    </section>
+
+    <section class="screen" id="s6">
+        <div class="paper-card">
+            <h2 style="font-family:'Playfair Display'">One Last Note</h2>
+            <p style="text-align: left; line-height: 1.6; color:#555;">
+                As the new year begins, I just wanted to share a few good thoughts with you.<br><br>
+                I hope the coming year brings you peace, growth, and many small wins.
+            </p>
+            <div style="margin-top:20px; border-top: 1px dashed #ccc; padding-top:10px;">
+                <small>Sealed with care ✉️</small>
+            </div>
+        </div>
+        <button class="btn" style="background: white; color: #333" onclick="location.reload()">Restart Journey</button>
+    </section>
+
+</div>
+
+<script>
+    /* --- JAVASCRIPT LOGIC --- */
+    
+    function nextScreen(hideId, showId) {
+        // Hide current
+        const current = document.getElementById(hideId);
+        current.style.opacity = '0';
+        setTimeout(() => {
+            current.classList.remove('active');
+            current.classList.add('hidden');
+            
+            // Show next
+            const next = document.getElementById(showId);
+            next.classList.remove('hidden');
+            next.classList.add('active');
+            
+            // If next is loading screen, trigger loading
+            if(showId === 's5') {
+                startLoading();
+            }
+        }, 500); // Wait for transition
+    }
+
+    function startLoading() {
+        let width = 0;
+        const bar = document.getElementById('p-bar');
+        const text = document.getElementById('loading-text');
+        
+        const interval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(interval);
+                setTimeout(() => nextScreen('s5', 's6'), 500);
+            } else {
+                width++;
+                bar.style.width = width + '%';
+                text.innerText = width + '%';
+            }
+        }, 30); // Speed of loading
+    }
+</script>
+
+</body>
+</html>
